@@ -6,16 +6,18 @@
 
 // ---------------- PARAMETERS ------------------
 
+var numImgs = 9;
+var numWords = 7;
+
+var numBlocks = 3;
+
 var numTrials = 28;
 
 //amount of white space between trials
-var normalpause = 1500;
+var normalpause = 1000;
 
 //pause after picture chosen, to display red border around picture selected
 var timeafterClick = 1000;
-
-//length of filler (every time fill2 comes up, add 1sec of time)
-var fillerpause = 5000;
 
 //an array of all the novel words used in the study; used for look-up purposes in pic1type, pic2type, and trialtype
 var novelWords = ["modi", "dax", "pifo", "dofa", "toma", "fep", "wug", "kreeb"];
@@ -26,35 +28,27 @@ var handler;
 
 // ---------------- HELPER ------------------
 
+allImgs = range(1,numImgs);
+allImgs = shuffle(allImgs);
+
+allWords = range(1,numWords);
+allWords = shuffle(allWords);
+
+allImgs = allImgs.map(function(elem){return 'Novel'+elem;});
+//$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
+
+var trialImgs = [[allImgs.slice(0,3)],[allImgs.slice(3,6)],[allImgs.slice(6,9)]]; // 3 Images for each trial
+trialOrder = shuffle([1,2,3]);
+
+var trialWords = [[allWords.slice(0,2)],[allWords.slice(2,4)],[allWords.slice(4,7)]]; // The trial with three images is the "ME" trial
+trialWords = trialOrder.map(function(elem){return trialWords.slice(elem-1,elem);});
+
 // show slide function
 function showSlide(id) {
   $(".slide").hide(); //jquery - all elements with class of slide - hide
   $("#"+id).show(); //jquery - element with given id - show
 }
 
-//array shuffle function
-shuffle = function (o) { //v1.0
-    for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-}
-
-getCurrentDate = function() {
-	var currentDate = new Date();
-	var day = currentDate.getDate();
-	var month = currentDate.getMonth() + 1;
-	var year = currentDate.getFullYear();
-	return (month + "/" + day + "/" + year);
-}
-
-//currently not called; could be useful for reaction time?
-getCurrentTime = function() {
-	var currentTime = new Date();
-	var hours = currentTime.getHours();
-	var minutes = currentTime.getMinutes();
-
-	if (minutes < 10) minutes = "0" + minutes;
-	return (hours + ":" + minutes);
-}
 
 //returns the word array; in the below order for list 1 and reversed for list 2
 makeWordList = function(order) {
@@ -94,49 +88,7 @@ getTrialType = function(word, leftpic, rightpic) {
    	return trialtype;
 }
 
-createDot = function(dotx, doty, i, tag) {
-	var dots;
-	if (tag === "smiley") {
-		dots = ["smiley1", "smiley2", "smiley3", "smiley4", "smiley5"];
-	} else {
-		dots = [1, 2, 3, 4, 5];
-	}
 
-	var dot = document.createElement("img");
-	dot.setAttribute("class", "dot");
-	dot.id = "dot_" + dots[i];
-	if (tag === "smiley") {
-		dot.src = "dots/dot_" + "smiley" + ".jpg";
-	} else {
-		dot.src = "dots/dot_" + dots[i] + ".jpg";
-	}
-
-    var x = Math.floor(Math.random()*950);
-    var y = Math.floor(Math.random()*540);
-
-    var invalid = "true";
-
-    //make sure dots do not overlap
-    while (true) {
-    	invalid = "true";
-	   	for (j = 0; j < dotx.length ; j++) {
-    		if (Math.abs(dotx[j] - x) + Math.abs(doty[j] - y) < 250) {
-    			var invalid = "false";
-    			break;
-    		}
-		}
-		if (invalid === "true") {
- 			dotx.push(x);
-  		  	doty.push(y);
-  		  	break;
-  	 	}
-  	 	x = Math.floor(Math.random()*400);
-   		y = Math.floor(Math.random()*400);
-	}
-
-    dot.setAttribute("style","position:absolute;left:"+x+"px;top:"+y+"px;");
-   	training.appendChild(dot);
-}
 
 //Handles audio; indexes into the sprite to play the prompt associated with a critical word
 playPrompt = function(word) {
@@ -292,12 +244,6 @@ var experiment = {
 		}
   		experiment.subid = document.getElementById("subjectID").value;
 
-		//list
-		if (document.getElementById("order").value !== "1" && document.getElementById("order").value !== "2") { //|| document.getElementById("order").value !== "2") {
-			$("#checkMessage").html('<font color="red">For list, you must choose either a 1 or 2</font>');
-			return;
-		}
-		experiment.order = parseInt(document.getElementById("order").value);
 		//experiment.training(0);
 		experiment.training();
 	},
@@ -312,38 +258,6 @@ var experiment = {
     	showSlide("finish");
     	document.body.style.background = "black";
     },
-
-    //for filler rounds; most experimental variables set to "na"; fades in the filler after the regular
-    //amount of time between rounds, and fades it out after the specified time "fillerpause"
-	displayFiller: function(fillername, counter) {
-		experiment.trialtype = "filler";
-		experiment.word = fillername;
-		experiment.trialnum = counter;
-		experiment.pic1 = "na";
-		experiment.pic2 = "na";
-		experiment.pic1type = "na";
-		experiment.pic2type = "na";
-		experiment.side = "na";
-		experiment.chosenpic = "na";
-		experiment.response = "na";
-		experiment.reactiontime = "na";
-		experiment.processOneRow();
-
-		var lengthoffiller = fillerpause;
-
-		//boy filler is 1s longer
-		if (fillername === "fill2") lengthoffiller += 1000;
-
-		var filler_html = '<table align = "center" cellpadding="30"><tr><td align="center"><img class="pic" src="' + 'tabletobjects/' + fillername + '.jpg" id= "fillerPic"/></td></tr></table>';
-		$("#filler").html(filler_html);
-		setTimeout(function() {
-		 	$("#filler").fadeIn();
-		 	playPrompt(fillername);
-		}, normalpause);
-		setTimeout(function() {
-			$("#filler").fadeOut();
-		}, lengthoffiller);
-	},
 
 	//concatenates all experimental variables into a string which represents one "row" of data in the eventual csv, to live in the server
 	processOneRow: function() {
@@ -398,7 +312,7 @@ var experiment = {
 	    	if (clickDisabled) return;
 
 	    	//disable subsequent clicks once the participant has made their choice
-			clickDisabled = true;
+				clickDisabled = true;
 
 	    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
 	    	//onset of the word
@@ -445,7 +359,7 @@ var experiment = {
 			experiment.processOneRow();
 	    	counter++;
 
-	    	$(document.getElementById(picID)).css('margin', "-8px");
+	    $(document.getElementById(picID)).css('margin', "-8px");
 			$(document.getElementById(picID)).css('border', "solid 8px red");
 
 			//remove the pictures from the image array that have been used, and the word from the wordList that has been used
