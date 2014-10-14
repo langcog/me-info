@@ -1,150 +1,102 @@
 var spriteData = {
-	dog: {
+	look_cup: {
 		start: 0,
-		onset: 2.608,
-		length: 3.380
+		onset: 1.578,
+		end: 3.205,
 	},
-	cookie: {
-		start: 3.380,
-		onset: 5.987,
-		length: 3.345
+	find_cup: {
+		start: 4.205,
+		onset: 6.180,
+		end: 6.763
 	},
-	car: {
-		start: 6.725,
-		onset: 9.460,
-		length: 3.461
+	look_flower: {
+		start: 7.763,
+		onset: 9.288,
+		end: 11.201
 	},
-	dax: {
-		start: 10.186,
-		onset: 12.688,
-		length: 3.230
+	find_flower: {
+			start: 12.201,
+			onset: 14.083,
+			end: 14.731
+		},
+	look_shoe: {
+		start: 15.731,
+		onset: 17.205,
+		end: 19.043
 	},
-	frog: {
-		start: 13.416,
-		onset: 16.058,
-		length: 3.380
+	find_shoe: {
+			start: 20.043,
+			onset: 22.025,
+			end: 22.567
 	},
-	fill1: {
-		start: 17.400,
-		//start: 16.796,
-		onset: 0,
-		length: 3.229
-		//length: 3.833
+	look_fenam {
+		start: 23.567,
+		onset: 25.119,
+		length: 27.156
 	},
-	lion: {
-		start: 20.629,
-		onset: 23.137,
-		length: 3.438
+	find_fenam: {
+		start: 28.156,
+		onset: 30.099,
+		end: 30.745
 	},
-	modi: {
-		start: 24.067,
-		onset: 26.635,
-		length: 3.450
+	look_jic {
+		start: 31.745,
+		onset: 33.325,
+		end: 35.069
 	},
-	apple: {
-		start: 27.517,
-		onset: 30.204,
-		length: 3.380
+	find_jic: {
+		start: 36.069,
+		onset: 38.044,
+		end: 38.546
 	},
-	train: {
-		start: 30.897,
-		onset: 33.516,
-		length: 3.612
+	look_kumo {
+		start: 39.546,
+		onset: 41.148,
+		end: 43.141
 	},
-	toma: {
-		start: 34.509,
-		onset: 37.159,
-		length: 3.577
+	find_kumo: {
+		start: 44.141,
+		onset: 46.121,
+		end: 46.685
 	},
-	fill2: {
-		//start: 38.086,
-		start: 38.901,
-		onset: 0,
-		//length: 5.818
-		length: 5.003
+	look_loga {
+		start: 47.685,
+		onset: 49.342,
+		end: 51.209
 	},
-	pifo: {
-		start: 43.904,
-		onset: 46.767,
-		length: 3.634
+	find_loga: {
+		start: 52.209,
+		onset: 54.265,
+		end: 54.831
 	},
-	cup: {
-		start: 47.538,
-		onset: 50.265,
-		length: 3.670
+	look_pel {
+		start: 55.831,
+		onset: 57.352,
+		end: 58.923
 	},
-	kreeb: {
-		start: 51.208,
-		onset: 53.766,
-		length: 3.449
+	find_pel: {
+		start: 59.923,
+		onset: 61.196,
+		end: 62.338
 	},
-	cat: {
-		start: 54.657,
-		onset: 57.163,
-		length: 3.334 
+	look_rudd {
+		start: 63.338,
+		onset: 64.913,
+		end: 66.632
 	},
-	monkey: {
-		start: 57.991,
-		onset: 60.734,
-		length: 3.507
+	find_rudd: {
+		start: 67.632,
+		onset: 69.625,
+		end: 70.043
 	},
-	fill3: {
-		//start: 61.498,
-		start: 62.504,
-		onset: 0,
-		//length: 4.278
-		length: 3.272
+	look_vot {
+		start: 71.043,
+		onset: 72.642,
+		end: 74.199
 	},
-	dofa: {
-		start: 65.776,
-		onset: 68.306,
-		length: 3.356
-	},
-	fep: {
-		start: 69.132,
-		onset: 71.672,
-		length: 3.621
-	},
-	carrot: {
-		start: 72.753,
-		onset: 75.284,
-		length: 3.612
-	},
-	shovel: {
-		start: 76.365,
-		onset: 79.019,
-		length: 3.586
-	},
-	hammer: {
-		start: 79.951,
-		onset: 82.757,
-		length: 3.531
-	},
-	fill4: {
-		//start: 83.482,
-		start: 84.104,
-		onset: 0,
-		//length: 3.126
-		length: 2.504 
-	},
-	wug: {
-		start: 86.608,
-		onset: 89.363,
-		length: 3.334
-	},
-	shoe: {
-		start: 89.942,
-		onset: 92.517,
-		length: 3.565
-	},
-	horse: {
-		start: 93.507,
-		onset: 96.252,
-		length: 3.481
-	},
-	bottle: {
-		start: 96.988,
-		onset: 99.578,
-		length: 3.334
+	find_vot: {
+		start: 75.199,
+		onset: 77.230,
+		end: 77.602
 	}
 };

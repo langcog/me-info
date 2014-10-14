@@ -5,7 +5,10 @@
 // Overview: (i) Parameters (ii) Helper Functions (iii) Control Flow
 
 // ---------------- PARAMETERS ------------------
+bread chair cup flower lion sweater tomato truck
 
+
+cup flower shoe truck
 var numImgs = 9;
 var numWords = 7;
 
@@ -28,33 +31,46 @@ var handler;
 
 // ---------------- HELPER ------------------
 
-allImgs = range(1,numImgs);
+allImgs = range(1, numImgs);
 allImgs = shuffle(allImgs);
 
-allWords = range(1,numWords);
+allWords = range(1, numWords);
 allWords = shuffle(allWords);
 
-allImgs = allImgs.map(function(elem){return 'Novel'+elem;});
+allImgs = allImgs.map(function(elem) {
+	return 'Novel' + elem;
+});
 //$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
 
-var trialImgs = [[allImgs.slice(0,3)],[allImgs.slice(3,6)],[allImgs.slice(6,9)]]; // 3 Images for each trial
-trialOrder = shuffle([1,2,3]);
+var trialImgs = [
+	[allImgs.slice(0, 3)],
+	[allImgs.slice(3, 6)],
+	[allImgs.slice(6, 9)]
+]; // 3 Images for each trial
+trialOrder = shuffle([1, 2, 3]);
 
-var trialWords = [[allWords.slice(0,2)],[allWords.slice(2,4)],[allWords.slice(4,7)]]; // The trial with three images is the "ME" trial
-trialWords = trialOrder.map(function(elem){return trialWords.slice(elem-1,elem);});
+var trialWords = [
+	[allWords.slice(0, 2)],
+	[allWords.slice(2, 4)],
+	[allWords.slice(4, 7)]
+]; // The trial with three images is the "ME" trial
+trialWords = trialOrder.map(function(elem) {
+	return trialWords.slice(elem - 1, elem);
+});
 
 // show slide function
 function showSlide(id) {
-  $(".slide").hide(); //jquery - all elements with class of slide - hide
-  $("#"+id).show(); //jquery - element with given id - show
+	$(".slide").hide(); //jquery - all elements with class of slide - hide
+	$("#" + id).show(); //jquery - element with given id - show
 }
 
 
 //returns the word array; in the below order for list 1 and reversed for list 2
 makeWordList = function(order) {
 	var wordList = ["dog", "cookie", "car", "dax", "frog", "fill1", "lion", "modi", "apple",
-					"train", "toma", "fill2", "pifo", "cup", "kreeb", "cat", "monkey", "fill3",
-					"dofa", "fep", "carrot", "shovel", "hammer", "fill4", "wug", "shoe", "horse", "bottle"];
+		"train", "toma", "fill2", "pifo", "cup", "kreeb", "cat", "monkey", "fill3",
+		"dofa", "fep", "carrot", "shovel", "hammer", "fill4", "wug", "shoe", "horse", "bottle"
+	];
 	if (order === 2) {
 		wordList.reverse();
 	}
@@ -77,29 +93,29 @@ makeImageArray = function(order) {
 }
 
 getTrialType = function(word, leftpic, rightpic) {
-   	var trialtype;
-   	if (novelWords.indexOf(leftpic) === -1 && novelWords.indexOf(rightpic) === -1) {
-  		trialtype = "rec";
-   	} else if (novelWords.indexOf(word) === -1) {
-   		trialtype = "MEcontrol";
-   	} else {
-   		trialtype = "MEexperimental";
-   	}
-   	return trialtype;
+	var trialtype;
+	if (novelWords.indexOf(leftpic) === -1 && novelWords.indexOf(rightpic) === -1) {
+		trialtype = "rec";
+	} else if (novelWords.indexOf(word) === -1) {
+		trialtype = "MEcontrol";
+	} else {
+		trialtype = "MEexperimental";
+	}
+	return trialtype;
 }
 
 
 
 //Handles audio; indexes into the sprite to play the prompt associated with a critical word
 playPrompt = function(word) {
-	audioSprite.removeEventListener('timeupdate',handler);
+	audioSprite.removeEventListener('timeupdate', handler);
 	audioSprite.currentTime = spriteData[word].start;
 	audioSprite.play();
 
 	handler = function() {
-	    if (this.currentTime >= spriteData[word].start + spriteData[word].length) {
-	        this.pause();
-	    }
+		if (this.currentTime >= spriteData[word].start + spriteData[word].length) {
+			this.pause();
+		}
 	};
 	audioSprite.addEventListener('timeupdate', handler, false);
 }
@@ -108,20 +124,21 @@ playPrompt = function(word) {
 
 //PRELOAD ALL IMAGES//---------------------------
 var allimages = ["dog", "book", "cookie", "baby", "fep", "car", "dax", "cup", "pifo", "frog",
-					  "table", "lion", "modi", "shovel", "wug", "apple", "train", "dofa", "monkey", "toma",
-					  "frog", "pifo", "cup", "dax", "kreeb", "shoe", "ball", "cat", "toma", "monkey", "dofa", "train",
-					  "car", "fep", "carrot", "lamp", "shovel", "modi", "sheep", "hammer", "apple", "wug",
-					  "shoe", "kreeb", "horse", "clock", "bird", "bottle", "fill1", "fill2", "fill3", "fill4"];
+	"table", "lion", "modi", "shovel", "wug", "apple", "train", "dofa", "monkey", "toma",
+	"frog", "pifo", "cup", "dax", "kreeb", "shoe", "ball", "cat", "toma", "monkey", "dofa", "train",
+	"car", "fep", "carrot", "lamp", "shovel", "modi", "sheep", "hammer", "apple", "wug",
+	"shoe", "kreeb", "horse", "clock", "bird", "bottle", "fill1", "fill2", "fill3", "fill4"
+];
 //for critical trials and fillers
 var images = new Array();
-for (i = 0; i<allimages.length; i++) {
+for (i = 0; i < allimages.length; i++) {
 	images[i] = new Image();
 	images[i].src = "tabletobjects/" + allimages[i] + ".jpg";
 }
 
 //for dot game
 var dots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5", "x", "dot_smiley"];
-for (i = 0; i<dots.length; i++) {
+for (i = 0; i < dots.length; i++) {
 	images[i] = new Image();
 	images[i].src = "dots/" + dots[i] + ".jpg";
 }
@@ -134,41 +151,41 @@ showSlide("instructions");
 var experiment = {
 
 	subid: "",
-		//inputed at beginning of experiment
+	//inputed at beginning of experiment
 	trialnum: 0,
-		//trial number
+	//trial number
 	order: 1,
-		//whether child received list 1 or list 2
+	//whether child received list 1 or list 2
 	word: "",
-		//word that child is queried on
+	//word that child is queried on
 	pic1: "",
-		//the name of the picture on the left
+	//the name of the picture on the left
 	pic2: "",
-		//the name of the picture on the right
+	//the name of the picture on the right
 	pic1type: "",
-		//whether the picture on the left is familiar or novel
+	//whether the picture on the left is familiar or novel
 	pic2type: "",
-		//whether the picture on the right is familiar or novel
+	//whether the picture on the right is familiar or novel
 	side: "",
-		//whether the child picked the left (L) or the right (R) picture
+	//whether the child picked the left (L) or the right (R) picture
 	chosenpic: "",
-		//the name of the picture the child picked
+	//the name of the picture the child picked
 	response: "",
-		//whether the response was the correct response (Y) or the incorrect response (N)
+	//whether the response was the correct response (Y) or the incorrect response (N)
 	trialtype: "",
-		//whether the trial was a word recognition (rec) or mutual exclusivity (me) trial;
-		// control (MEcontrol) or experimental (MEexperimental)
+	//whether the trial was a word recognition (rec) or mutual exclusivity (me) trial;
+	// control (MEcontrol) or experimental (MEexperimental)
 	date: getCurrentDate(),
-		//the date of the experiment
+	//the date of the experiment
 	timestamp: getCurrentTime(),
-		//the time that the trial was completed at
+	//the time that the trial was completed at
 	reactiontime: 0,
 	//TODO : add reaction time variable *****
 
 	preStudy: function() {
 		document.body.style.background = "black";
 		$("#prestudy").hide();
-		setTimeout(function () {
+		setTimeout(function() {
 			experiment.next();
 		}, normalpause);
 	},
@@ -176,8 +193,9 @@ var experiment = {
 	//sets up and allows participants to play "the dot game"
 	training: function(dotgame) {
 		var allDots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5",
-						"dot_smiley1", "dot_smiley2", "dot_smiley3",
-						"dot_smiley4", "dot_smiley5"];
+			"dot_smiley1", "dot_smiley2", "dot_smiley3",
+			"dot_smiley4", "dot_smiley5"
+		];
 		var xcounter = 0;
 		var dotCount = 5;
 
@@ -201,25 +219,25 @@ var experiment = {
 		}
 		showSlide("training");
 		$('.dot').bind('click touchstart', function(event) {
-	    	var dotID = $(event.currentTarget).attr('id');
+			var dotID = $(event.currentTarget).attr('id');
 
-	    	//only count towards completion clicks on dots that have not yet been clicked
-	    	if (allDots.indexOf(dotID) === -1) {
-	    		return;
-	    	}
-	    	allDots.splice(allDots.indexOf(dotID), 1);
-	    	document.getElementById(dotID).src = "dots/x.jpg";
-	    	xcounter++
-	    	if (xcounter === dotCount) {
-	    		setTimeout(function () {
-	    			$("#training").hide();
-	    			if (dotgame === 0) {
-	    				//hide old x marks before game begins again
-	    				var dotID;
-	    				for (i = 1; i <= dotCount; i++) {
-	    					dotID = "dot_" + i;
-	    					training.removeChild(document.getElementById(dotID));
-	    				}
+			//only count towards completion clicks on dots that have not yet been clicked
+			if (allDots.indexOf(dotID) === -1) {
+				return;
+			}
+			allDots.splice(allDots.indexOf(dotID), 1);
+			document.getElementById(dotID).src = "dots/x.jpg";
+			xcounter++
+			if (xcounter === dotCount) {
+				setTimeout(function() {
+					$("#training").hide();
+					if (dotgame === 0) {
+						//hide old x marks before game begins again
+						var dotID;
+						for (i = 1; i <= dotCount; i++) {
+							dotID = "dot_" + i;
+							training.removeChild(document.getElementById(dotID));
+						}
 						experiment.training();
 						dotgame++;
 					} else {
@@ -227,22 +245,22 @@ var experiment = {
 						setTimeout(function() {
 							showSlide("prestudy");
 							//experiment.next();
-						}, normalpause*2);
+						}, normalpause * 2);
 					}
-				}, normalpause*2);
+				}, normalpause * 2);
 			}
-	    });
+		});
 	},
 
 
 	//Checks to see whether the experimenter inputted appropriate values before moving on with the experiment
 	checkInput: function() {
 		//subject ID
-  		if (document.getElementById("subjectID").value.length < 1) {
+		if (document.getElementById("subjectID").value.length < 1) {
 			$("#checkMessage").html('<font color="red">You must input a subject ID</font>');
 			return;
 		}
-  		experiment.subid = document.getElementById("subjectID").value;
+		experiment.subid = document.getElementById("subjectID").value;
 
 		//experiment.training(0);
 		experiment.training();
@@ -251,13 +269,13 @@ var experiment = {
 	//TODO: second training round?
 
 	//the end of the experiment, where the background becomes completely black
-    end: function () {
-    	setTimeout(function () {
-    		$("#stage").fadeOut();
-    	}, normalpause);
-    	showSlide("finish");
-    	document.body.style.background = "black";
-    },
+	end: function() {
+		setTimeout(function() {
+			$("#stage").fadeOut();
+		}, normalpause);
+		showSlide("finish");
+		document.body.style.background = "black";
+	},
 
 	//concatenates all experimental variables into a string which represents one "row" of data in the eventual csv, to live in the server
 	processOneRow: function() {
@@ -266,81 +284,85 @@ var experiment = {
 		dataforRound += "," + experiment.pic1 + "," + experiment.pic2 + "," + experiment.pic1type + "," + experiment.pic2type;
 		dataforRound += "," + experiment.side + "," + experiment.chosenpic + "," + experiment.response + "," + experiment.trialtype;
 		dataforRound += "," + experiment.date + "," + experiment.timestamp + "," + experiment.reactiontime + "\n";
-		$.post("http://langcog.stanford.edu/cgi-bin/TABLET/tabletstudysave.php", {postresult_string : dataforRound});
+		$.post("http://langcog.stanford.edu/cgi-bin/TABLET/tabletstudysave.php", {
+			postresult_string: dataforRound
+		});
 	},
 
 	// MAIN DISPLAY FUNCTION
-  	next: function() {
+	next: function() {
 
 		//returns the list of all words to use in the study - list dependent
-  		var wordList = makeWordList(experiment.order);
-  		//returns the list of all images to use in the study - list dependent
+		var wordList = makeWordList(experiment.order);
+		//returns the list of all images to use in the study - list dependent
 		var imageArray = makeImageArray(experiment.order);
 
 		var objects_html = "";
 		var counter = 1;
 
-   		// Create the object table (tr=table row; td= table data)
+		// Create the object table (tr=table row; td= table data)
 		//objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
 
-	   	//HTML for the first object on the left
+		//HTML for the first object on the left
 		leftname = "tabletobjects/" + imageArray[0] + ".jpg";
-		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname +  '"alt="' + leftname + '" id= "leftPic"/></td>';
+		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname + '"alt="' + leftname + '" id= "leftPic"/></td>';
 
 
 		centername = "tabletobjects/" + imageArray[1] + ".jpg";
-		objects_html += '<td align="center"><img class="pic" src="' + centername +  '"alt="' + centername + '" id= "centerPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" src="' + centername + '"alt="' + centername + '" id= "centerPic"/></td>';
 
 		//HTML for the first object on the right
 		rightname = "tabletobjects/" + imageArray[1] + ".jpg";
-	   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" src="' + rightname + '"alt="' + rightname + '" id= "rightPic"/></td>';
 
-    	objects_html += '</tr></table>';
-	    $("#objects").html(objects_html);
+		objects_html += '</tr></table>';
+		$("#objects").html(objects_html);
 
-	    $("#stage").fadeIn();
+		$("#stage").fadeIn();
 
-	    var startTime = (new Date()).getTime();
-	    playPrompt(wordList[0]);
+		var startTime = (new Date()).getTime();
+		playPrompt(wordList[0]);
 
 		//click disable for the first slide
 		var clickDisabled = true;
-		setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start)*1000 + 300);
+		setTimeout(function() {
+			clickDisabled = false;
+		}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start) * 1000 + 300);
 
-	    $('.pic').bind('click touchstart', function(event) {
+		$('.pic').bind('click touchstart', function(event) {
 
-	    	if (clickDisabled) return;
+			if (clickDisabled) return;
 
-	    	//disable subsequent clicks once the participant has made their choice
-				clickDisabled = true;
+			//disable subsequent clicks once the participant has made their choice
+			clickDisabled = true;
 
-	    	//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
-	    	//onset of the word
-	    	experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000;
+			//time the participant clicked - the time the audio began - the amount of time between the beginning of the audio and the
+			//onset of the word
+			experiment.reactiontime = (new Date()).getTime() - startTime - (spriteData[wordList[0]].onset - spriteData[wordList[0]].start) * 1000;
 
-	    	experiment.trialnum = counter;
-	    	experiment.word = wordList[0];
-	    	experiment.pic1 = imageArray[0];
-	    	experiment.pic2 = imageArray[1];
+			experiment.trialnum = counter;
+			experiment.word = wordList[0];
+			experiment.pic1 = imageArray[0];
+			experiment.pic2 = imageArray[1];
 
-	    	//get whether the left and right pictures were familiar or novel
-	    	if (novelWords.indexOf(imageArray[0]) === -1) {
-	    		experiment.pic1type = "familiar";
-	    	} else {
-	    		experiment.pic1type = "novel";
-	    	}
-	    	if (novelWords.indexOf(imageArray[1]) === -1) {
-	    		experiment.pic2type = "familiar";
-	    	} else {
-	    		experiment.pic2type = "novel";
-	    	}
+			//get whether the left and right pictures were familiar or novel
+			if (novelWords.indexOf(imageArray[0]) === -1) {
+				experiment.pic1type = "familiar";
+			} else {
+				experiment.pic1type = "novel";
+			}
+			if (novelWords.indexOf(imageArray[1]) === -1) {
+				experiment.pic2type = "familiar";
+			} else {
+				experiment.pic2type = "novel";
+			}
 
-	    	//Was the picture clicked on the right or the left?
-	    	var picID = $(event.currentTarget).attr('id');
-	    	if (picID === "leftPic") {
+			//Was the picture clicked on the right or the left?
+			var picID = $(event.currentTarget).attr('id');
+			if (picID === "leftPic") {
 				experiment.side = "L";
 				experiment.chosenpic = imageArray[0];
-	    	} else {
+			} else {
 				experiment.side = "R";
 				experiment.chosenpic = imageArray[1];
 			}
@@ -357,9 +379,9 @@ var experiment = {
 
 			//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
 			experiment.processOneRow();
-	    	counter++;
+			counter++;
 
-	    $(document.getElementById(picID)).css('margin', "-8px");
+			$(document.getElementById(picID)).css('margin', "-8px");
 			$(document.getElementById(picID)).css('border', "solid 8px red");
 
 			//remove the pictures from the image array that have been used, and the word from the wordList that has been used
@@ -398,24 +420,26 @@ var experiment = {
 				//move on to the next round after either the normal amount of time between critical rounds, or after
 				//the filler has occurred
 				setTimeout(function() {
-						document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
-						document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
+					document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
+					document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
 
-						//to make word display visible (as an alternative to sound), uncomment just change background of display to white
-						//document.getElementById("word").innerHTML = wordList[0];
+					//to make word display visible (as an alternative to sound), uncomment just change background of display to white
+					//document.getElementById("word").innerHTML = wordList[0];
 
-						$(document.getElementById(picID)).css('border', "none");
-						$(document.getElementById(picID)).css('margin', "0px");
+					$(document.getElementById(picID)).css('border', "none");
+					$(document.getElementById(picID)).css('margin', "0px");
 
-						$("#stage").fadeIn();
+					$("#stage").fadeIn();
 
-						//reactivate clicks only after a little bit after the prompt's word
-						setTimeout(function() {clickDisabled = false;}, (spriteData[wordList[0]].onset-spriteData[wordList[0]].start)*1000 + 300);
+					//reactivate clicks only after a little bit after the prompt's word
+					setTimeout(function() {
+						clickDisabled = false;
+					}, (spriteData[wordList[0]].onset - spriteData[wordList[0]].start) * 1000 + 300);
 
-						startTime = (new Date()).getTime();
-						playPrompt(wordList[0]);
+					startTime = (new Date()).getTime();
+					playPrompt(wordList[0]);
 				}, gap + normalpause);
 			}, timeafterClick);
-	    });
-    },
+		});
+	},
 }
