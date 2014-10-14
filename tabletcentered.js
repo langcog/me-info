@@ -42,6 +42,7 @@ allImgs = allImgs.map(function(elem) {
 });
 //$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
 
+<<<<<<< HEAD
 var trialImgs = [
 	[allImgs.slice(0, 3)],
 	[allImgs.slice(3, 6)],
@@ -57,6 +58,20 @@ var trialWords = [
 trialWords = trialOrder.map(function(elem) {
 	return trialWords.slice(elem - 1, elem);
 });
+=======
+var trialImgs = [[allImgs.slice(0,3)],[allImgs.slice(3,6)],[allImgs.slice(6,9)]]; // 3 Images for each trial
+trialOrder = shuffle([1,2,3]);
+
+//assigning three objects to each trial
+var trialOneImgs = [trialImgs[0]]
+var trialTwoImgs = [trialImgs[1]]
+var trialThreeImgs = [trialImgs[2]]
+
+
+var trialWords = [[allWords.slice(0,2)],[allWords.slice(2,4)],[allWords.slice(4,7)]]; // The trial with three images is the "ME" trial
+trialWords = trialOrder.map(function(elem){return trialWords.slice(elem-1,elem);});
+>>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
+
 
 // show slide function
 function showSlide(id) {
@@ -81,14 +96,8 @@ makeWordList = function(order) {
 makeImageArray = function(order) {
 	//remove filler names from allimages array used in preloading.
 	//Trial 1 will be "pifo" on left and "frog" on right, trial two will be "carrot" on left and "lamp" on right, etc...
-	var toSlice = allimages.length - 4;
+	var toSlice = allImgs.length - 4;
 	var imageArray = allimages.slice(0, toSlice);
-
-	//reverse the list so that the trials are reversed and the sides are swapped: trial 1 will be "shoe"
-	//on left and "kreeb" on right, etc...
-	if (order === 2) {
-		imageArray.reverse();
-	}
 	return imageArray;
 }
 
@@ -155,7 +164,14 @@ var experiment = {
 	trialnum: 0,
 	//trial number
 	order: 1,
+<<<<<<< HEAD
 	//whether child received list 1 or list 2
+=======
+		//whether child received list 1 or list 2
+	firstTrialPics: trialOneImgs;
+	secondTrialPics: trialTwoImgs;
+	thirdTrialPics: trialThreeImgs;
+>>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
 	word: "",
 	//word that child is queried on
 	pic1: "",
@@ -289,8 +305,19 @@ var experiment = {
 		});
 	},
 
+<<<<<<< HEAD
 	// MAIN DISPLAY FUNCTION
 	next: function() {
+=======
+
+	//Training function
+	train: function() {
+
+	}
+
+	// MAIN DISPLAY FUNCTIOn
+  	next: function() {
+>>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
 
 		//returns the list of all words to use in the study - list dependent
 		var wordList = makeWordList(experiment.order);
@@ -312,8 +339,8 @@ var experiment = {
 		objects_html += '<td align="center"><img class="pic" src="' + centername + '"alt="' + centername + '" id= "centerPic"/></td>';
 
 		//HTML for the first object on the right
-		rightname = "tabletobjects/" + imageArray[1] + ".jpg";
-		objects_html += '<td align="center"><img class="pic" src="' + rightname + '"alt="' + rightname + '" id= "rightPic"/></td>';
+		rightname = "tabletobjects/" + imageArray[2] + ".jpg";
+	   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
 
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
@@ -362,10 +389,14 @@ var experiment = {
 			if (picID === "leftPic") {
 				experiment.side = "L";
 				experiment.chosenpic = imageArray[0];
-			} else {
-				experiment.side = "R";
+	    } else if (picID == "centerPic") {
+				experiment.side = "C";
+				experiment.chosenpic = imageArray[1];
+			} else if (picID == "rightPic") {
+				experiment.side == "R"
 				experiment.chosenpic = imageArray[1];
 			}
+			alert(experiment.side)
 
 			//If the child picked the picture that matched with the word, then they were correct. If they did not, they were not correct.
 			if (experiment.chosenpic === experiment.word) {
@@ -375,7 +406,7 @@ var experiment = {
 			}
 
 			//what kind of trial was this?
-			experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1]);
+			experiment.trialtype = getTrialType(experiment.word, imageArray[0], imageArray[1], imageArray[2]);
 
 			//Add one to the counter and process the data to be saved; the child completed another "round" of the experiment
 			experiment.processOneRow();
@@ -420,8 +451,9 @@ var experiment = {
 				//move on to the next round after either the normal amount of time between critical rounds, or after
 				//the filler has occurred
 				setTimeout(function() {
-					document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
-					document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
+						document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
+						document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
+						document.getElementById("centerPic").src = "tabletobjects/" + imageArray[2] + ".jpg";
 
 					//to make word display visible (as an alternative to sound), uncomment just change background of display to white
 					//document.getElementById("word").innerHTML = wordList[0];
