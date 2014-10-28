@@ -29,7 +29,7 @@ var spriteData = {
 			onset: 22.025,
 			end: 22.567
 	},
-	look_fenam {
+	look_fenam: {
 		start: 23.567,
 		onset: 25.119,
 		length: 27.156
@@ -39,7 +39,7 @@ var spriteData = {
 		onset: 30.099,
 		end: 30.745
 	},
-	look_jic {
+	look_jic: {
 		start: 31.745,
 		onset: 33.325,
 		end: 35.069
@@ -49,7 +49,7 @@ var spriteData = {
 		onset: 38.044,
 		end: 38.546
 	},
-	look_kumo {
+	look_kumo: {
 		start: 39.546,
 		onset: 41.148,
 		end: 43.141
@@ -59,7 +59,7 @@ var spriteData = {
 		onset: 46.121,
 		end: 46.685
 	},
-	look_loga {
+	look_loga: {
 		start: 47.685,
 		onset: 49.342,
 		end: 51.209
@@ -69,7 +69,7 @@ var spriteData = {
 		onset: 54.265,
 		end: 54.831
 	},
-	look_pel {
+	look_pel: {
 		start: 55.831,
 		onset: 57.352,
 		end: 58.923
@@ -79,7 +79,7 @@ var spriteData = {
 		onset: 61.196,
 		end: 62.338
 	},
-	look_rudd {
+	look_rudd: {
 		start: 63.338,
 		onset: 64.913,
 		end: 66.632
@@ -89,7 +89,7 @@ var spriteData = {
 		onset: 69.625,
 		end: 70.043
 	},
-	look_vot {
+	look_vot: {
 		start: 71.043,
 		onset: 72.642,
 		end: 74.199
