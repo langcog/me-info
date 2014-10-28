@@ -5,10 +5,10 @@
 // Overview: (i) Parameters (ii) Helper Functions (iii) Control Flow
 
 // ---------------- PARAMETERS ------------------
-bread chair cup flower lion sweater tomato truck
+//bread chair cup flower lion sweater tomato truck
 
 
-cup flower shoe truck
+//cup flower shoe truck
 var numImgs = 9;
 var numWords = 7;
 
@@ -42,7 +42,6 @@ allImgs = allImgs.map(function(elem) {
 });
 //$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
 
-<<<<<<< HEAD
 var trialImgs = [
 	[allImgs.slice(0, 3)],
 	[allImgs.slice(3, 6)],
@@ -58,19 +57,6 @@ var trialWords = [
 trialWords = trialOrder.map(function(elem) {
 	return trialWords.slice(elem - 1, elem);
 });
-=======
-var trialImgs = [[allImgs.slice(0,3)],[allImgs.slice(3,6)],[allImgs.slice(6,9)]]; // 3 Images for each trial
-trialOrder = shuffle([1,2,3]);
-
-//assigning three objects to each trial
-var trialOneImgs = [trialImgs[0]]
-var trialTwoImgs = [trialImgs[1]]
-var trialThreeImgs = [trialImgs[2]]
-
-
-var trialWords = [[allWords.slice(0,2)],[allWords.slice(2,4)],[allWords.slice(4,7)]]; // The trial with three images is the "ME" trial
-trialWords = trialOrder.map(function(elem){return trialWords.slice(elem-1,elem);});
->>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
 
 
 // show slide function
@@ -164,14 +150,12 @@ var experiment = {
 	trialnum: 0,
 	//trial number
 	order: 1,
-<<<<<<< HEAD
+
 	//whether child received list 1 or list 2
-=======
-		//whether child received list 1 or list 2
-	firstTrialPics: trialOneImgs;
-	secondTrialPics: trialTwoImgs;
-	thirdTrialPics: trialThreeImgs;
->>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
+//	firstTrialPics: trialOneImgs;
+//	secondTrialPics: trialTwoImgs;
+//	thirdTrialPics: trialThreeImgs;
+
 	word: "",
 	//word that child is queried on
 	pic1: "",
@@ -305,19 +289,13 @@ var experiment = {
 		});
 	},
 
-<<<<<<< HEAD
-	// MAIN DISPLAY FUNCTION
-	next: function() {
-=======
-
 	//Training function
 	train: function() {
 
-	}
+	},
 
 	// MAIN DISPLAY FUNCTIOn
   	next: function() {
->>>>>>> 4467a098021a71d6cc18b9fddc655db50143ef18
 
 		//returns the list of all words to use in the study - list dependent
 		var wordList = makeWordList(experiment.order);
