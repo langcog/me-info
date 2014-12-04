@@ -12,9 +12,9 @@
 var numImgs = 9;
 var numWords = 7;
 
-var numBlocks = 3;
-
-var numTrials = 28;
+//var numBlocks = 3;
+var counter = 0
+var numTrials = 3;
 
 //amount of white space between trials
 var normalpause = 1000;
@@ -43,21 +43,20 @@ allImgs = allImgs.map(function(elem) {
 //$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
 
 var trialImgs = [
-	[allImgs.slice(0, 3)],
-	[allImgs.slice(3, 6)],
-	[allImgs.slice(6, 9)]
+	allImgs.slice(0, 3),
+	allImgs.slice(3, 6),
+	allImgs.slice(6, 9)
 ]; // 3 Images for each trial
 trialOrder = shuffle([1, 2, 3]);
 
 var trialWords = [
-	[allWords.slice(0, 2)],
-	[allWords.slice(2, 4)],
-	[allWords.slice(4, 7)]
+	allWords.slice(0, 2),
+	allWords.slice(2, 4),
+	allWords.slice(4, 7)
 ]; // The trial with three images is the "ME" trial
 trialWords = trialOrder.map(function(elem) {
 	return trialWords.slice(elem - 1, elem);
 });
-
 
 // show slide function
 function showSlide(id) {
@@ -67,6 +66,7 @@ function showSlide(id) {
 
 
 //returns the word array; in the below order for list 1 and reversed for list 2
+//FIXME
 makeWordList = function(order) {
 	var wordList = ["dog", "cookie", "car", "dax", "frog", "fill1", "lion", "modi", "apple",
 		"train", "toma", "fill2", "pifo", "cup", "kreeb", "cat", "monkey", "fill3",
@@ -152,9 +152,9 @@ var experiment = {
 	order: 1,
 
 	//whether child received list 1 or list 2
-//	firstTrialPics: trialOneImgs;
-//	secondTrialPics: trialTwoImgs;
-//	thirdTrialPics: trialThreeImgs;
+	//	firstTrialPics: trialOneImgs;
+	//	secondTrialPics: trialTwoImgs;
+	//	thirdTrialPics: trialThreeImgs;
 
 	word: "",
 	//word that child is queried on
@@ -186,7 +186,7 @@ var experiment = {
 		document.body.style.background = "black";
 		$("#prestudy").hide();
 		setTimeout(function() {
-			experiment.next();
+			experiment.train();
 		}, normalpause);
 	},
 
@@ -263,7 +263,8 @@ var experiment = {
 		experiment.subid = document.getElementById("subjectID").value;
 
 		//experiment.training(0);
-		experiment.training();
+		//experiment.training();
+		showSlide("prestudy");
 	},
 
 	//TODO: second training round?
@@ -292,10 +293,49 @@ var experiment = {
 	//Training function
 	train: function() {
 
+		//returns the list of all words to use in the study - list dependent
+		//var wordList = makeWordList(experiment.order);
+
+		//returns the list of all images to use in the study - list dependent
+		//var imageArray = makeImageArray(experiment.order);
+
+
+		//Do this by trial instead?
+
+		//returns the list of words to use in this trial
+		//var wordList = trialWords
+
+		//returns the list of images to use in this trial
+		var imageArray = trialImgs[counter]
+
+		var objects_html = "";
+
+		//HTML for the first object on the left
+		leftname = "tabletobjects/" + imageArray[0] + ".jpg";
+		objects_html += '<table align = "center" cellpadding="30"><tr></tr><tr><td align="center"><img class="pic" src="' + leftname + '"alt="' + leftname + '" id= "leftPic"/></td>';
+
+		//HTML for the first object on the right
+		rightname = "tabletobjects/" + imageArray[2] + ".jpg";
+		objects_html += '<td align="center"><img class="pic" src="' + rightname + '"alt="' + rightname + '" id= "rightPic"/></td>';
+
+		objects_html += '</tr></table>';
+		$("#objects").html(objects_html);
+
+		$("#stage").fadeIn();
+
+		//commenting out sound because I can't get it to work...
+		//playPrompt(wordList[0]);
+
+		setTimeout(function() {
+			$("#stage").fadeOut();
+			experiment.next();
+
+		}, 3000);  //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+
 	},
 
 	// MAIN DISPLAY FUNCTIOn
-  	next: function() {
+	next: function() {
 
 		//returns the list of all words to use in the study - list dependent
 		var wordList = makeWordList(experiment.order);
@@ -303,7 +343,6 @@ var experiment = {
 		var imageArray = makeImageArray(experiment.order);
 
 		var objects_html = "";
-		var counter = 1;
 
 		// Create the object table (tr=table row; td= table data)
 		//objects_html = '<table class = "centered" ><tr><td id=word colspan="2">' + wordList[0] + '</td></tr><tr>';;
@@ -318,7 +357,7 @@ var experiment = {
 
 		//HTML for the first object on the right
 		rightname = "tabletobjects/" + imageArray[2] + ".jpg";
-	   	objects_html += '<td align="center"><img class="pic" src="' + rightname +  '"alt="' + rightname + '" id= "rightPic"/></td>';
+		objects_html += '<td align="center"><img class="pic" src="' + rightname + '"alt="' + rightname + '" id= "rightPic"/></td>';
 
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
@@ -367,7 +406,7 @@ var experiment = {
 			if (picID === "leftPic") {
 				experiment.side = "L";
 				experiment.chosenpic = imageArray[0];
-	    } else if (picID == "centerPic") {
+			} else if (picID == "centerPic") {
 				experiment.side = "C";
 				experiment.chosenpic = imageArray[1];
 			} else if (picID == "rightPic") {
@@ -402,36 +441,36 @@ var experiment = {
 				$("#stage").fadeOut();
 
 				//there are no more trials for the experiment to run
-				if (counter === numTrials + 1) {
+				if (counter === numTrials) {
 					experiment.end();
 					return;
 				}
 
-				var gap;
-				//check to see if the next round is going to be a filler round; if so, display a filler
-				if (wordList[0].indexOf("fill") !== -1) {
-					experiment.displayFiller(wordList[0], counter);
-					//remove the filler word so that the next round features the next critical word (do not change the images array)
+				// var gap;
+				// //check to see if the next round is going to be a filler round; if so, display a filler
+				// if (wordList[0].indexOf("fill") !== -1) {
+				// 	experiment.displayFiller(wordList[0], counter);
+				// 	//remove the filler word so that the next round features the next critical word (do not change the images array)
 
-					gap = fillerpause;
+				// 	gap = fillerpause;
 
-					//boy filler is 1s longer
-					if (wordList[0] === "fill2") gap += 1000;
+				// 	//boy filler is 1s longer
+				// 	if (wordList[0] === "fill2") gap += 1000;
 
-					//another round has now passed, so increment the counter and remove the filler word from the list
-					wordList.splice(0, 1);
-					counter++;
+				// 	//another round has now passed, so increment the counter and remove the filler word from the list
+				// 	wordList.splice(0, 1);
+				// 	counter++;
 
-				} else {
-					gap = 0;
-				}
+				// } else {
+				// 	gap = 0;
+				// }
 
 				//move on to the next round after either the normal amount of time between critical rounds, or after
 				//the filler has occurred
 				setTimeout(function() {
-						document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
-						document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
-						document.getElementById("centerPic").src = "tabletobjects/" + imageArray[2] + ".jpg";
+					document.getElementById("leftPic").src = "tabletobjects/" + imageArray[0] + ".jpg";
+					document.getElementById("rightPic").src = "tabletobjects/" + imageArray[1] + ".jpg";
+					document.getElementById("centerPic").src = "tabletobjects/" + imageArray[2] + ".jpg";
 
 					//to make word display visible (as an alternative to sound), uncomment just change background of display to white
 					//document.getElementById("word").innerHTML = wordList[0];

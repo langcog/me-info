@@ -27,7 +27,7 @@ body {
 input, select, button {font-family: Georgia, serif; font-size: 14px;}
 
 button {
-	background: url(images/button-gradient.png);
+	background: url(imgs/button-gradient.png);
 	border: 1px solid #999;
 	border-top: 1px solid #e0e0e0;
 	border-left: 1px solid #e0e0e0;
@@ -39,7 +39,7 @@ button {
 }
 
 button2 {
-	background: url(images/button-gradient.png);
+	background: url(imgs/button-gradient.png);
 	border: 1px solid #999;
 	border-top: 1px solid #e0e0e0;
 	border-left: 1px solid #e0e0e0;
@@ -57,7 +57,6 @@ button:active {
 }
 
 button[disabled] {
-	background: url(zen-button.png);
 	border: 1px solid #999;
 	border-top: 1px solid #e0e0e0;
 	border-left: 1px solid #e0e0e0;
@@ -116,10 +115,5 @@ This stuff will vary by experiment.
 
 #rightPic {
 	width: 300px;
-	height: auto;
-}
-
-#fillerPic {
-	width: 900px;
 	height: auto;
 }
