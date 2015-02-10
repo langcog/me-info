@@ -23,16 +23,16 @@ playPrompt = function(word) {
 }
 
 //PRELOAD ALL IMAGES
-var allimages = ["bread","chair","cup","flower","lion",
-"Novel1","Novel2","Novel3","Novel4","Novel5","Novel6",
-"Novel7","Novel8","Novel9","shoe","sweater","tomato","truck"
+var allimages = ["bread", "chair", "cup", "flower", "lion",
+	"Novel1", "Novel2", "Novel3", "Novel4", "Novel5", "Novel6",
+	"Novel7", "Novel8", "Novel9", "shoe", "sweater", "tomato", "truck"
 ];
 //for critical trials and fillers
 var images = new Array();
 for (i = 0; i < allimages.length; i++) {
 	images[i] = new Image();
 	images[i].src = "imgs/" + allimages[i] + ".jpg";
-}
+};
 // //for dot game
 // //not needed for adults
 // var dots = ["dot_1", "dot_2", "dot_3", "dot_4", "dot_5", "x", "dot_smiley"];
@@ -44,7 +44,7 @@ for (i = 0; i < allimages.length; i++) {
 // --------------- PARAMETERS ----------------
 
 //counter keeps track of the trial you are on
-var counter = 0
+var counter = 0;
 
 //total number of trials
 var numTrials = 3;
@@ -95,14 +95,14 @@ showSlide("instructions");
 
 //Disable start button in turk until HIT is accepted
 if (turk.previewMode == true) {
-	$("#startButton").attr("disabled", "disabled")
+	$("#startButton").attr("disabled", "disabled");
 }
 
 //Start button is disabled until all images are preloaded.  
-$("#pleaseWait").html("Please wait while the experiment loads...")
+$("#pleaseWait").html("Please wait while the experiment loads...");
 $(window).load(function() {
 	document.getElementById("startButton").disabled = false;
-	$("#pleaseWait").html("")
+	$("#pleaseWait").html("");
 })
 
 var experiment = {
@@ -124,16 +124,16 @@ var experiment = {
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords
+		var wordList = trialWords;
 
-		//TODO: FIgure out counterbalancing
+
 		//returns the list of images to use in this trial
-		var imageArray = trialImgs[counter]
+		var imageArray = trialImgs[counter];
 
 		//src for each object
-		var objectA = "imgs/" + imageArray[0] + ".jpg"
-		var objectB = "imgs/" + imageArray[1] + ".jpg"
-		var objectC = "imgs/" + imageArray[2] + ".jpg"
+		var objectA = "imgs/" + imageArray[0] + ".jpg";
+		var objectB = "imgs/" + imageArray[1] + ".jpg";
+		var objectC = "imgs/" + imageArray[2] + ".jpg";
 
 		//build table in html.  
 		var objects_html = "";
@@ -144,8 +144,18 @@ var experiment = {
 		$("#objects").html(objects_html);
 
 		//show objects A & B and play word 1
-		$("#leftPic").attr("src", objectA)
-		$("#rightPic").attr("src", objectB)
+		//TODO: FIgure out counterbalancing?  Right now everything is randomized
+		//order that pictures will be presented in
+		var picOrderAB = shuffle(["objectA", "objectB"]);
+
+		//set names based on object that will be shown
+		$("#leftPic").attr("name", picOrderAB[0]);
+		$("#rightPic").attr("name", picOrderAB[1]);
+
+		//show images
+		$("[name='objectA']").attr("src", objectA);
+		$("[name='objectB']").attr("src", objectB);
+
 
 		$("#stage").fadeIn();
 
@@ -156,10 +166,21 @@ var experiment = {
 		setTimeout(function() {
 			$("#stage").fadeOut();
 
-			//show objects B & C and play word 2
+
 			setTimeout(function() {
-				$("#leftPic").attr("src", objectB)
-				$("#rightPic").attr("src", objectC)
+				//show objects B & C and play word 2
+				//order that pictures will be presented in
+				var picOrderBC = shuffle(["objectB", "objectC"]);
+
+				//set names based on object that will be shown
+				$("#leftPic").attr("name", picOrderBC[0]);
+				$("#rightPic").attr("name", picOrderBC[1]);
+
+				//show images
+				$("[name='objectB']").attr("src", objectB);
+				$("[name='objectC']").attr("src", objectC);
+
+
 				$("#stage").fadeIn();
 
 				//TODO: add sound.  Play word 2.  label twice per pair
@@ -167,11 +188,11 @@ var experiment = {
 
 				//fade out and go to test
 				setTimeout(function() {
-						$("#stage").fadeOut();
-						experiment.test()
+					$("#stage").fadeOut();
+					experiment.test();
 
-					}, 3000) //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
-			}, 1000)
+				}, 3000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+			}, 1000);
 		}, 3000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
 	},
 
@@ -180,15 +201,15 @@ var experiment = {
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords
+		var wordList = trialWords;
 
 		//returns the list of images to use in this trial
-		var imageArray = trialImgs[counter]
+		var imageArray = trialImgs[counter];
 
 		//src for each object
-		var objectA = "imgs/" + imageArray[0] + ".jpg"
-		var objectB = "imgs/" + imageArray[1] + ".jpg"
-		var objectC = "imgs/" + imageArray[2] + ".jpg"
+		var objectA = "imgs/" + imageArray[0] + ".jpg";
+		var objectB = "imgs/" + imageArray[1] + ".jpg";
+		var objectC = "imgs/" + imageArray[2] + ".jpg";
 
 		//build table in html.  
 		var objects_html = "";
@@ -199,10 +220,19 @@ var experiment = {
 		objects_html += '</tr></table>';
 		$("#objects").html(objects_html);
 
+
+		//order that pictures will be presented in
+		var picOrderABC = shuffle(["objectA", "objectB", "objectC"]);
+
+		//set names based on object that will be shown
+		$("#leftPic").attr("name", picOrderABC[0]);
+		$("#centerPic").attr("name", picOrderABC[1]);
+		$("#rightPic").attr("name", picOrderABC[2]);
+
 		//show all three images
-		$("#leftPic").attr("src", objectA)
-		$("#centerPic").attr("src", objectB)
-		$("#rightPic").attr("src", objectC)
+		$("[name='objectA']").attr("src", objectA);
+		$("[name='objectB']").attr("src", objectB);
+		$("[name='objectC']").attr("src", objectC);
 
 		$("#stage").fadeIn();
 
@@ -210,22 +240,56 @@ var experiment = {
 		//var startTime = (new Date()).getTime();
 
 		//TODO: Add sound
+		//Either label 1, label 2, or label 3, depending on the trial.
+		//If they hear label 1, we expect adults to select object A
+		//If they hear label 2, we expect adults to select object C
+		//If they hear a novel label (label 3), we expect adults to select object B
+
 		//playPrompt(wordList[0]);
 
-		//TODO: On click, collect data & move to next trial
+		$(".pic").on("click", function() {
 
-		//do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+			var selectedPic = this.name
+			alert(selectedPic)
+
+			//TODO: Do we want reaction time?
+			// endTime = (new Date()).getTime()
+
+			//data collection
+			var data = {
+				//TODO: get info about trial type/what label they heard
+				objectA: imageArray[0],
+				objectB: imageArray[1],
+				objectC: imageArray[2],
+				response: selectedPic,
+				order: counter
+				//rt: endTime - startTime
+			}
+
+			experiment.data.push(data)
+
+			counter++
+
+			setTimeout(function() {
+				if (counter == numTrials) {
+					experiment.end();
+				} else {
+					experiment.train();
+				}
+			}, 1000);
+
+		});
 
 	},
 
-	//TODO: Get demographic information
+	//TODO: Do we want to collect demographic info?
 
 	end: function() {
 
-		showSlide("finished")
+		showSlide("finished");
 
 		setTimeout(function() {
-			turk.submit(experiment)
-		}, 1000)
+			turk.submit(experiment);
+		}, 1000);
 	}
 }
