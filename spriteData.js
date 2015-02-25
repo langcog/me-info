@@ -15,9 +15,9 @@ var spriteData = {
 		end: 11.201
 	},
 	find_flower: {
-			start: 12.201,
-			onset: 14.083,
-			end: 14.731
+		start: 12.201,
+		onset: 14.083,
+		end: 14.731
 		},
 	look_shoe: {
 		start: 15.731,
@@ -25,9 +25,9 @@ var spriteData = {
 		end: 19.043
 	},
 	find_shoe: {
-			start: 20.043,
-			onset: 22.025,
-			end: 22.567
+		start: 20.043,
+		onset: 22.025,
+		end: 22.567
 	},
 	look_fenam: {
 		start: 23.567,
@@ -98,5 +98,15 @@ var spriteData = {
 		start: 75.199,
 		onset: 77.230,
 		end: 77.602
+	},
+	look_truck: {
+		start: 78.602,
+		onset: 79.201,
+		end: 81.153,
+	},
+	find_truck: {
+		start: 82.153,
+		onset: 83.150,
+		end: 83.691
 	}
 };

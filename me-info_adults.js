@@ -10,12 +10,13 @@ function showSlide(id) {
 
 //Handles audio; indexes into the sprite to play the prompt associated with a critical word
 playPrompt = function(word) {
+
 	audioSprite.removeEventListener('timeupdate', handler);
 	audioSprite.currentTime = spriteData[word].start;
 	audioSprite.play();
 
 	handler = function() {
-		if (this.currentTime >= spriteData[word].start + spriteData[word].length) {
+		if (this.currentTime >= spriteData[word].end) {
 			this.pause();
 		}
 	};
@@ -54,7 +55,7 @@ var numImgs = 9;
 var numWords = 7;
 
 //an array of all the novel words used in the study; used for look-up purposes in pic1type, pic2type, and trialtype
-var novelWords = ["modi", "dax", "pifo", "dofa", "toma", "fep", "wug", "kreeb"];
+var novelWords = ["fenam","jic","kumo","loga","pel","rudd","vot"];
 
 //******for handling sound; see helper function playPrompt(word)
 var audioSprite = $("#sound_player")[0];
@@ -63,8 +64,6 @@ var handler;
 allImgs = range(1, numImgs);
 allImgs = shuffle(allImgs);
 
-allWords = range(1, numWords);
-allWords = shuffle(allWords);
 
 allImgs = allImgs.map(function(elem) {
 	return 'Novel' + elem;
@@ -82,9 +81,9 @@ trialOrder = shuffle([1, 2, 3]);
 
 //List of words to use
 var trialWords = [
-	allWords.slice(0, 2),
-	allWords.slice(2, 4),
-	allWords.slice(4, 7)
+	novelWords.slice(0, 2),
+	novelWords.slice(2, 4),
+	novelWords.slice(4, 7)
 ]; // The trial with three words is the "ME" trial
 trialWords = trialOrder.map(function(elem) {
 	return trialWords.slice(elem - 1, elem);
@@ -124,7 +123,7 @@ var experiment = {
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords;
+		var wordList = trialWords[counter];
 
 
 		//returns the list of images to use in this trial
@@ -156,11 +155,12 @@ var experiment = {
 		$("[name='objectA']").attr("src", objectA);
 		$("[name='objectB']").attr("src", objectB);
 
+		//play sounds
+		playPrompt("look_" + wordList[0][0]);
+
 
 		$("#stage").fadeIn();
 
-		//TODO: add sound.  Play word 1.  label twice per pair
-		//playPrompt(wordList[0]);
 
 		//fade out
 		setTimeout(function() {
@@ -184,7 +184,8 @@ var experiment = {
 				$("#stage").fadeIn();
 
 				//TODO: add sound.  Play word 2.  label twice per pair
-				//playPrompt(wordList[1]);
+				playPrompt("look_" + wordList[0][1]);
+
 
 				//fade out and go to test
 				setTimeout(function() {
@@ -201,7 +202,7 @@ var experiment = {
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords;
+		var wordList = trialWords[counter];
 
 		//returns the list of images to use in this trial
 		var imageArray = trialImgs[counter];
@@ -240,6 +241,8 @@ var experiment = {
 		//var startTime = (new Date()).getTime();
 
 		//TODO: Add sound
+		playPrompt("find_" + wordList[0][0]);
+
 		//Either label 1, label 2, or label 3, depending on the trial.
 		//If they hear label 1, we expect adults to select object A
 		//If they hear label 2, we expect adults to select object C
