@@ -250,7 +250,6 @@ var experiment = {
 		$(".pic").on("click", function() {
 
 			var selectedPic = this.name
-			alert(selectedPic)
 
 			//TODO: Do we want reaction time?
 			// endTime = (new Date()).getTime()
