@@ -10,7 +10,6 @@ function showSlide(id) {
 
 //Handles audio; indexes into the sprite to play the prompt associated with a critical word
 playPrompt = function(word) {
-
 	audioSprite.removeEventListener('timeupdate', handler);
 	audioSprite.currentTime = spriteData[word].start;
 	audioSprite.play();
@@ -44,24 +43,61 @@ for (i = 0; i < allimages.length; i++) {
 
 // --------------- PARAMETERS ----------------
 
+//******for handling sound; see helper function playPrompt(word)
+var audioSprite = $("#sound_player")[0];
+var handler;
+
+// -----Practice trials-----
 //counter keeps track of the trial you are on
-var counter = 0;
+var practiceCounter = 0;
+
+//total number of trials
+var numPractice = 2;
+
+//number of images & words
+var numPracticeImgs = 6;
+var numPracticeWords = 4;
+
+//List of images to use
+practiceImgs = [
+	["cup", "lion", "flower"],
+	["shoe", "truck", "chair"]
+];
+
+practiceWords = [
+	[1, ["cup", "flower"]],
+	[2, ["shoe", "truck"]]
+];
+
+// practiceTrialOrder = shuffle([1, 2]);
+
+//List of words to use
+//an array of all the novel words used in the study
+// var novelWords = ["cup", "flower", "shoe", "truck"];
+
+// var trialWords = [
+// 	novelWords.slice(0, 2),
+// 	novelWords.slice(2, 4),
+// 	novelWords.slice(4, 7)
+// ]; // The trial with three words is the "ME" trial
+// trialWords = trialOrder.map(function(elem) {
+// 	return trialWords.slice(elem - 1, elem);
+// });
+
+
+// -----Experiment trials-----
+//counter keeps track of the trial you are on
+var trialCounter = 0;
 
 //total number of trials
 var numTrials = 3;
 
 //number of images & words
-var numImgs = 9;
-var numWords = 7;
+var numTrialImgs = 9;
+var numTrialWords = 7;
 
-//an array of all the novel words used in the study; used for look-up purposes in pic1type, pic2type, and trialtype
-var novelWords = ["fenam","jic","kumo","loga","pel","rudd","vot"];
-
-//******for handling sound; see helper function playPrompt(word)
-var audioSprite = $("#sound_player")[0];
-var handler;
-
-allImgs = range(1, numImgs);
+//List of images to use
+allImgs = range(1, numTrialImgs);
 allImgs = shuffle(allImgs);
 
 
@@ -70,24 +106,25 @@ allImgs = allImgs.map(function(elem) {
 });
 //$(allImgs.map(function(elem){return 'stimuli/images/'+elem+'.jpg';})).preload();
 
-
-//List of images to use
 var trialImgs = [
 	allImgs.slice(0, 3),
 	allImgs.slice(3, 6),
 	allImgs.slice(6, 9)
 ]; // 3 Images for each trial
-trialOrder = shuffle([1, 2, 3]);
+// trialOrder = shuffle([1, 2, 3]);
 
 //List of words to use
+//an array of all the novel words used in the study
+var novelWords = shuffle(["fenam", "jic", "kumo", "loga", "pel", "rudd", "vot"]);
+
 var trialWords = [
-	novelWords.slice(0, 2),
-	novelWords.slice(2, 4),
-	novelWords.slice(4, 7)
+	[1, novelWords.slice(0, 2)],
+	[2, novelWords.slice(2, 4)],
+	[3, novelWords.slice(4, 7)]
 ]; // The trial with three words is the "ME" trial
-trialWords = trialOrder.map(function(elem) {
-	return trialWords.slice(elem - 1, elem);
-});
+// trialWords = trialOrder.map(function(elem) {
+// 	return trialWords.slice(elem - 1, elem);
+// });
 
 // --------------- EXPERIMENT ----------------------------------------
 showSlide("instructions");
@@ -105,9 +142,6 @@ $(window).load(function() {
 })
 
 var experiment = {
-	//practiceTrials: practiceTrial_order,
-	//trials: trial_order,
-	completed: [],
 	data: [],
 	//gender: [],
 	//age: "",
@@ -118,16 +152,41 @@ var experiment = {
 
 	//TODO: Practice trials.  Do we want/need these for adults?
 
-	train: function() {
-		$("#instructions").hide();
+	moreInstructions: function() {
+		showSlide("moreInstructions");
+	},
+
+	startGame: function() {
+		document.body.style.background = "white";
+		showSlide("startGame");
+	},
+
+	practiceTrain: function() {
+		$("#moreInstructions").hide();
+		experiment.train(practiceCounter, practiceWords, practiceImgs, "practice");
+	},
+
+	practiceTest: function() {
+		experiment.test(practiceCounter, numPractice, practiceWords, practiceImgs, "practice");
+	},
+
+	experimentTrain: function() {
+		$("#startGame").hide();
+		experiment.train(trialCounter, trialWords, trialImgs, "exp");
+	},
+
+	experimentTest: function() {
+		experiment.test(trialCounter, numTrials, trialWords, trialImgs, "exp");
+	},
+
+	train: function(counter, words, imgs, type) {
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords[counter];
-
+		var wordList = words[counter][1];
 
 		//returns the list of images to use in this trial
-		var imageArray = trialImgs[counter];
+		var imageArray = imgs[counter];
 
 		//src for each object
 		var objectA = "imgs/" + imageArray[0] + ".jpg";
@@ -155,8 +214,8 @@ var experiment = {
 		$("[name='objectA']").attr("src", objectA);
 		$("[name='objectB']").attr("src", objectB);
 
-		//play sounds
-		playPrompt("look_" + wordList[0][0]);
+		//play word 1
+		playPrompt("look_" + wordList[0]);
 
 
 		$("#stage").fadeIn();
@@ -183,29 +242,37 @@ var experiment = {
 
 				$("#stage").fadeIn();
 
-				//TODO: add sound.  Play word 2.  label twice per pair
-				playPrompt("look_" + wordList[0][1]);
+				//Play word 2.  label twice per pair
+				playPrompt("look_" + wordList[1]);
 
 
 				//fade out and go to test
 				setTimeout(function() {
 					$("#stage").fadeOut();
-					experiment.test();
 
-				}, 3000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+					if (type == "practice") {
+						experiment.practiceTest();
+					} else if (type == "exp") {
+						experiment.experimentTest();
+					}
+
+				}, 5000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
 			}, 1000);
-		}, 3000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+		}, 5000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
 	},
 
-	test: function() {
+	test: function(counter, total, words, imgs, type) {
 		$("#stage").hide();
 		document.body.style.background = "black";
 
 		//returns the list of words to use in this trial
-		var wordList = trialWords[counter];
+		var wordList = words[counter][1];
+
+		//returns the trial type (whether we will play word 1, 2, or 3)
+		var trialType = words[counter][0]
 
 		//returns the list of images to use in this trial
-		var imageArray = trialImgs[counter];
+		var imageArray = imgs[counter];
 
 		//src for each object
 		var objectA = "imgs/" + imageArray[0] + ".jpg";
@@ -240,15 +307,19 @@ var experiment = {
 		//TODO: Do we want reaction time?
 		//var startTime = (new Date()).getTime();
 
-		//TODO: Add sound
-		playPrompt("find_" + wordList[0][0]);
-
 		//Either label 1, label 2, or label 3, depending on the trial.
 		//If they hear label 1, we expect adults to select object A
 		//If they hear label 2, we expect adults to select object C
 		//If they hear a novel label (label 3), we expect adults to select object B
 
-		//playPrompt(wordList[0]);
+		if (trialType == 1) {
+			playPrompt("find_" + wordList[0]);
+		} else if (trialType == 2) {
+			playPrompt("find_" + wordList[1]);
+		} else if (trialType == 3) {
+			playPrompt("find_" + wordList[2]);
+		}
+				
 
 		$(".pic").on("click", function() {
 
@@ -260,23 +331,38 @@ var experiment = {
 			//data collection
 			var data = {
 				//TODO: get info about trial type/what label they heard
+				practiceOrExp: type,
 				objectA: imageArray[0],
 				objectB: imageArray[1],
 				objectC: imageArray[2],
+				trialType: trialType,
 				response: selectedPic,
 				order: counter
-				//rt: endTime - startTime
+					//rt: endTime - startTime
 			}
 
 			experiment.data.push(data)
 
 			counter++
+			if (type == "practice") {
+				practiceCounter++
+			} else if (type == "exp") {
+				trialCounter++
+			}
 
 			setTimeout(function() {
-				if (counter == numTrials) {
-					experiment.end();
+				if (counter == total) {
+					if (type == "practice") {
+						experiment.startGame();
+					} else if (type == "exp") {
+						experiment.end();
+					}
 				} else {
-					experiment.train();
+					if (type == "practice") {
+						experiment.practiceTrain();
+					} else if (type == "exp") {
+						experiment.experimentTrain();
+					}
 				}
 			}, 1000);
 
