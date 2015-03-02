@@ -72,25 +72,25 @@ This stuff will vary by experiment.
 */
 
 #logo-text {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 #instructions {
-  text-align: center;
+	text-align: center;
 }
 
 
 .block-text {
-  width: 500px;
-  text-align: justify;
-  margin: 0 auto;
-  margin-bottom: 1em;
+	width: 500px;
+	text-align: justify;
+	margin: 0 auto;
+	margin-bottom: 1em;
 }
 
 #legal {
-  margin: 0 auto;
-  margin-top: 1.5em;
-  font-size: 0.8em;
+	margin: 0 auto;
+	margin-top: 1.5em;
+	font-size: 0.8em;
 }
 
 #labelInst {
@@ -103,17 +103,14 @@ This stuff will vary by experiment.
 }
 
 /*left pic and right pic are large but fit comfortably in the ipad window*/
-#leftPic {
+.pic {
 	width: 300px;
 	height: auto;
+	border : 10px solid black;
 }
 
-#centerPic {
+.selectedPic {
 	width: 300px;
 	height: auto;
-}
-
-#rightPic {
-	width: 300px;
-	height: auto;
+	border : 10px solid lime;
 }

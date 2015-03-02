@@ -163,20 +163,32 @@ var experiment = {
 
 	practiceTrain: function() {
 		$("#moreInstructions").hide();
-		experiment.train(practiceCounter, practiceWords, practiceImgs, "practice");
+		document.body.style.background = "black";
+		setTimeout(function() {
+			experiment.train(practiceCounter, practiceWords, practiceImgs, "practice");
+		}, 500)
 	},
 
 	practiceTest: function() {
-		experiment.test(practiceCounter, numPractice, practiceWords, practiceImgs, "practice");
+		document.body.style.background = "black";
+		setTimeout(function() {
+			experiment.test(practiceCounter, numPractice, practiceWords, practiceImgs, "practice");
+		}, 500)
 	},
 
 	experimentTrain: function() {
+		document.body.style.background = "black";
 		$("#startGame").hide();
-		experiment.train(trialCounter, trialWords, trialImgs, "exp");
+		setTimeout(function() {
+			experiment.train(trialCounter, trialWords, trialImgs, "exp");
+		}, 500)
 	},
 
 	experimentTest: function() {
-		experiment.test(trialCounter, numTrials, trialWords, trialImgs, "exp");
+		document.body.style.background = "black";
+		setTimeout(function() {
+			experiment.test(trialCounter, numTrials, trialWords, trialImgs, "exp");
+		}, 500)
 	},
 
 	train: function(counter, words, imgs, type) {
@@ -214,12 +226,10 @@ var experiment = {
 		$("[name='objectA']").attr("src", objectA);
 		$("[name='objectB']").attr("src", objectB);
 
-		//play word 1
-		playPrompt("look_" + wordList[0]);
-
-
 		$("#stage").fadeIn();
 
+		//play word 1
+		playPrompt("look_" + wordList[0]);
 
 		//fade out
 		setTimeout(function() {
@@ -269,7 +279,7 @@ var experiment = {
 		var wordList = words[counter][1];
 
 		//returns the trial type (whether we will play word 1, 2, or 3)
-		var trialType = words[counter][0]
+		var trialType = words[counter][0];
 
 		//returns the list of images to use in this trial
 		var imageArray = imgs[counter];
@@ -319,11 +329,14 @@ var experiment = {
 		} else if (trialType == 3) {
 			playPrompt("find_" + wordList[2]);
 		}
-				
+
 
 		$(".pic").on("click", function() {
+			$(".pic").off('click');
+			
+			$(this).attr("class", "selectedPic");
 
-			var selectedPic = this.name
+			var selectedPic = this.name;
 
 			//TODO: Do we want reaction time?
 			// endTime = (new Date()).getTime()
@@ -341,16 +354,18 @@ var experiment = {
 					//rt: endTime - startTime
 			}
 
-			experiment.data.push(data)
+			experiment.data.push(data);
 
-			counter++
+			counter++;
 			if (type == "practice") {
-				practiceCounter++
+				practiceCounter++;
 			} else if (type == "exp") {
-				trialCounter++
+				trialCounter++;
 			}
 
 			setTimeout(function() {
+				$("#stage").fadeOut();
+
 				if (counter == total) {
 					if (type == "practice") {
 						experiment.startGame();
@@ -373,11 +388,11 @@ var experiment = {
 	//TODO: Do we want to collect demographic info?
 
 	end: function() {
-
+		document.body.style.background = "white";
 		showSlide("finished");
 
 		setTimeout(function() {
-			turk.submit(experiment);
+			turk.submit(experiment.data);
 		}, 1000);
 	}
 }
