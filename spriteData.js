@@ -100,13 +100,13 @@ var spriteData = {
 		end: 77.703
 	},
 	look_truck: {
-		start: 77.703,
-		onset: 79.201,
-		end: 81.153
+		start: 78.703,
+		onset: 81.201,
+		end: 82.153
 	},
 	find_truck: {
-		start: 82.153,
-		onset: 83.150,
-		end: 83.691
+		start: 83.153,
+		onset: 85.150,
+		end: 85.691
 	}
 };
