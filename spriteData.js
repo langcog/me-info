@@ -32,7 +32,7 @@ var spriteData = {
 	look_fenam: {
 		start: 23.567,
 		onset: 25.119,
-		length: 27.156
+		end: 27.156
 	},
 	find_fenam: {
 		start: 28.156,
