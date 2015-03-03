@@ -330,57 +330,57 @@ var experiment = {
 			playPrompt("find_" + wordList[2]);
 		}
 
-
 		$(".pic").on("click", function() {
-			$(".pic").off('click');
-			
-			$(this).attr("class", "selectedPic");
+			if (audioSprite.paused == true) {
+				$(".pic").off('click');
 
-			var selectedPic = this.name;
+				$(this).attr("class", "selectedPic");
 
-			//TODO: Do we want reaction time?
-			// endTime = (new Date()).getTime()
+				var selectedPic = this.name;
 
-			//data collection
-			var data = {
-				//TODO: get info about trial type/what label they heard
-				practiceOrExp: type,
-				objectA: imageArray[0],
-				objectB: imageArray[1],
-				objectC: imageArray[2],
-				trialType: trialType,
-				response: selectedPic,
-				order: counter
-					//rt: endTime - startTime
-			}
+				//TODO: Do we want reaction time?
+				// endTime = (new Date()).getTime()
 
-			experiment.data.push(data);
-
-			counter++;
-			if (type == "practice") {
-				practiceCounter++;
-			} else if (type == "exp") {
-				trialCounter++;
-			}
-
-			setTimeout(function() {
-				$("#stage").fadeOut();
-
-				if (counter == total) {
-					if (type == "practice") {
-						experiment.startGame();
-					} else if (type == "exp") {
-						experiment.end();
-					}
-				} else {
-					if (type == "practice") {
-						experiment.practiceTrain();
-					} else if (type == "exp") {
-						experiment.experimentTrain();
-					}
+				//data collection
+				var data = {
+					//TODO: get info about trial type/what label they heard
+					practiceOrExp: type,
+					objectA: imageArray[0],
+					objectB: imageArray[1],
+					objectC: imageArray[2],
+					trialType: trialType,
+					response: selectedPic,
+					order: counter
+						//rt: endTime - startTime
 				}
-			}, 1000);
 
+				experiment.data.push(data);
+
+				counter++;
+				if (type == "practice") {
+					practiceCounter++;
+				} else if (type == "exp") {
+					trialCounter++;
+				}
+
+				setTimeout(function() {
+					$("#stage").fadeOut();
+
+					if (counter == total) {
+						if (type == "practice") {
+							experiment.startGame();
+						} else if (type == "exp") {
+							experiment.end();
+						}
+					} else {
+						if (type == "practice") {
+							experiment.practiceTrain();
+						} else if (type == "exp") {
+							experiment.experimentTrain();
+						}
+					}
+				}, 1000);
+			}
 		});
 
 	},
