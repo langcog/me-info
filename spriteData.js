@@ -2,7 +2,7 @@ var spriteData = {
 	look_cup: {
 		start: 0,
 		onset: 1.578,
-		end: 3.205,
+		end: 3.205
 	},
 	find_cup: {
 		start: 4.205,
@@ -97,12 +97,12 @@ var spriteData = {
 	find_vot: {
 		start: 75.199,
 		onset: 77.230,
-		end: 77.602
+		end: 77.703
 	},
 	look_truck: {
-		start: 78.602,
+		start: 77.703,
 		onset: 79.201,
-		end: 81.153,
+		end: 81.153
 	},
 	find_truck: {
 		start: 82.153,
