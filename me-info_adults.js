@@ -266,9 +266,9 @@ var experiment = {
 						experiment.experimentTest();
 					}
 
-				}, 8000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+				}, 7000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
 			}, 1000);
-		}, 8000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+		}, 7000); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
 	},
 
 	test: function(counter, total, words, imgs, type) {
