@@ -108,7 +108,9 @@ practice.data &lt;-<span class="st"> </span>data %&gt;%
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">correct =</span> <span class="kw">sum</span>(correct)) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(correct ==<span class="st"> </span><span class="dv">2</span>)
 
-passedPractice =<span class="st"> </span>total.subjs -<span class="st"> </span><span class="kw">nrow</span>(practice.data)</code></pre>
+passedPractice =<span class="st"> </span><span class="dv">1</span>-<span class="st"> </span>(total.subjs-<span class="kw">nrow</span>(practice.data))/total.subjs
+<span class="kw">print</span>(passedPractice)</code></pre>
+<pre><code>## [1] 0.969697</code></pre>
 <p>Does it blend?</p>
 <pre class="sourceCode r"><code class="sourceCode r">test.data &lt;-<span class="st"> </span>data %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(practiceOrExp ==<span class="st"> &quot;exp&quot;</span>, worker %in%<span class="st"> </span>practice.data$worker) %&gt;%

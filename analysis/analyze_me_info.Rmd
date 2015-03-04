@@ -48,7 +48,8 @@ practice.data <- data %>%
   summarise(correct = sum(correct)) %>%
   filter(correct == 2)
 
-passedPractice = total.subjs - nrow(practice.data)
+passedPractice = 1- (total.subjs-nrow(practice.data))/total.subjs
+print(passedPractice)
 ```
 
 Does it blend?
