@@ -1,0 +1,106 @@
+---
+title: "ME Info Anlaysis"
+author: "Dan Yurovsky"
+date: "March 04, 2015"
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, cache=TRUE)
+```
+
+Load libraries
+```{r, cache = FALSE}
+source("~/Projects/Other/Ranalysis/useful_dplyr.R")
+library(tidyr)
+library(magrittr)
+library(jsonlite)
+
+```
+
+Load data
+```{r}
+all.result.files <- paste("data/",
+                          list.files(path = "data/", pattern = '*.json', all.files = FALSE), 
+                          sep="");
+jsons <- lapply(all.result.files,fromJSON)
+workers <- sapply(jsons,function(x) x$WorkerId)
+data <- bind_rows(sapply(jsons,function(x) x$answers$data,simplify=FALSE))
+
+data$worker <- unlist(lapply(workers, function (x) rep(x,5)))
+```
+
+Exclusions
+```{r}
+data <- filter(data,worker != "A30D0ZW3Y1YMEW") #drop Mike
+total.subjs <- nrow(data)/5
+
+practice.data <- data %>%
+  filter(practiceOrExp == "practice") %>%
+  group_by(worker,trialType) %>%
+  mutate(correct = if(trialType == "FirstLabel" & response == "cup") TRUE
+         else if(trialType == "SecondLabel" & response == "truck") TRUE
+         else FALSE) %>%
+  group_by(worker) %>%
+  summarise(correct = sum(correct)) %>%
+  filter(correct == 2)
+
+passedPractice = total.subjs - nrow(practice.data)
+```
+
+Does it blend?
+```{r, fig.height=5, fig.width=5}
+test.data <- data %>%
+  filter(practiceOrExp == "exp", worker %in% practice.data$worker) %>%
+  rowwise() %>%
+  mutate(response = if(response == FirstObj) "FirstObj"
+         else if(response == SecondObj) "SecondObj"
+         else if(response == BothObj)"BothObj"
+         else NA) %>%
+  mutate(response = factor(response,levels=c("FirstObj","SecondObj","BothObj")),
+         trialType = factor(trialType,levels=c("FirstLabel","SecondLabel","New Label")))
+
+# Compute proportions
+ms <- test.data %>%
+  group_by(trialType,response) %>%
+  summarise(n = n()) %>%
+  mutate(prop = n/sum(n))
+
+# Does it blend?
+ggplot(ms,aes(x=trialType, y=prop,fill=response))+
+  geom_bar(stat="identity",position="dodge") +
+  scale_x_discrete(name = "Trial Type") +
+  scale_y_continuous(name = "Proportion Adults Choosing",limits=c(0,.8))+
+  theme_bw(base_size=14) +
+  theme(legend.position=c(.8,.8), panel.grid=element_blank()) +
+  scale_fill_brewer(palette="Set1")
+```
+
+Compute proportions by order?
+```{r,fig.height=5,fig.width=10}
+all.resps <- expand.grid(order = unique(test.data$order), 
+            trialType = unique(test.data$trialType),
+            response = unique(test.data$response)) %>%
+  mutate(n = 0)
+
+ms.order <- test.data %>%
+  group_by(order,trialType,response) %>%
+  summarise(n = n()) %>%
+  full_join(all.resps) %>%
+  mutate(prop = n/sum(n))
+
+
+ggplot(ms.order,aes(x=trialType, y=prop,fill=response))+
+  geom_bar(stat="identity",position="dodge") +
+  facet_wrap(~ order)+
+  scale_x_discrete(name = "Trial Type") +
+  scale_y_continuous(name = "Proportion Adults Choosing",limits=c(0,.8))+
+  theme_bw(base_size=14) +
+  theme(legend.position=c(.9,.85), panel.grid=element_blank()) +
+  scale_fill_brewer(palette="Set1")
+```
+  
+
