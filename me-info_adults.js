@@ -22,6 +22,12 @@ playPrompt = function(word) {
 	audioSprite.addEventListener('timeupdate', handler, false);
 }
 
+//Trims directories and extensions off of fileNames
+trim = function(item) {
+	var tmp = item;
+	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
+};
+
 //PRELOAD ALL IMAGES
 var allimages = ["bread", "chair", "cup", "flower", "lion",
 	"Novel1", "Novel2", "Novel3", "Novel4", "Novel5", "Novel6",
@@ -111,7 +117,7 @@ var trialImgs = [
 	allImgs.slice(3, 6),
 	allImgs.slice(6, 9)
 ]; // 3 Images for each trial
-// trialOrder = shuffle([1, 2, 3]);
+
 
 //List of words to use
 //an array of all the novel words used in the study
@@ -121,7 +127,9 @@ var trialWords = [
 	[1, novelWords.slice(0, 2)],
 	[2, novelWords.slice(2, 4)],
 	[3, novelWords.slice(4, 7)]
-]; // The trial with three words is the "ME" trial
+];
+trialWords = shuffle(trialWords)
+ // The trial with three words is the "ME" trial
 // trialWords = trialOrder.map(function(elem) {
 // 	return trialWords.slice(elem - 1, elem);
 // });
@@ -336,20 +344,22 @@ var experiment = {
 
 				$(this).attr("class", "selectedPic");
 
-				var selectedPic = this.name;
+				var selectedPic = this.src;
 
 				//TODO: Do we want reaction time?
 				// endTime = (new Date()).getTime()
+
+				trialTypes = ["FirstLabel", "SecondLabel", "New Label"]
 
 				//data collection
 				var data = {
 					//TODO: get info about trial type/what label they heard
 					practiceOrExp: type,
-					objectA: imageArray[0],
-					objectB: imageArray[1],
-					objectC: imageArray[2],
-					trialType: trialType,
-					response: selectedPic,
+					FirstObj: imageArray[0],
+					BothObj: imageArray[1],
+					SecondObj: imageArray[2],
+					trialType: trialTypes[trialType-1],
+					response: trim(selectedPic),
 					order: counter
 						//rt: endTime - startTime
 				}
