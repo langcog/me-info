@@ -151,6 +151,8 @@ $(window).load(function() {
 
 var experiment = {
 	data: [],
+	check1: "",
+	check2: "",
 	//gender: [],
 	//age: "",
 	//nativeLanguage: "",
@@ -260,7 +262,7 @@ var experiment = {
 
 			$("#checkButton").off('click').on('click', function() {
 
-				var check1 = $("#checkText").val();
+				check1 = $("#checkText").val();
 
 				if (check1.length == 0) {
 
@@ -300,7 +302,7 @@ var experiment = {
 
 							$("#checkButton").off('click').on('click', function() {
 
-								var check2 = $("#checkText").val();
+								check2 = $("#checkText").val();
 
 								if (check2.length == 0) {
 
@@ -312,13 +314,13 @@ var experiment = {
 									$("#manipulationCheck").hide()
 									$("#checkForm").trigger("reset");
 
-									var manipulation_check = {
-										trialNum: counter,
-										check1: check1,
-										check2: check2
-									};
+									// var manipulation_check = {
+									// 	trialNum: counter,
+									// 	check1: check1,
+									// 	check2: check2
+									// };
 
-									experiment.data.push(manipulation_check);
+									// experiment.data.push(manipulation_check);
 
 									if (type == "practice") {
 										experiment.practiceTest();
@@ -419,7 +421,9 @@ var experiment = {
 					SecondObj: imageArray[2],
 					trialType: trialTypes[trialType - 1],
 					response: trim(selectedPic),
-					trialNum: counter
+					trialNum: counter,
+					check1: check1,
+					check2: check2
 						//rt: endTime - startTime
 				}
 
