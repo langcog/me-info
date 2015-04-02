@@ -25,7 +25,7 @@ playPrompt = function(word) {
 //Trims directories and extensions off of fileNames
 trim = function(item) {
 	var tmp = item;
-	return tmp.slice(tmp.lastIndexOf("/")+1,tmp.lastIndexOf("."));
+	return tmp.slice(tmp.lastIndexOf("/") + 1, tmp.lastIndexOf("."));
 };
 
 //PRELOAD ALL IMAGES
@@ -129,10 +129,10 @@ var trialWords = [
 	[3, novelWords.slice(4, 7)]
 ];
 trialWords = shuffle(trialWords)
- // The trial with three words is the "ME" trial
-// trialWords = trialOrder.map(function(elem) {
-// 	return trialWords.slice(elem - 1, elem);
-// });
+	// The trial with three words is the "ME" trial
+	// trialWords = trialOrder.map(function(elem) {
+	// 	return trialWords.slice(elem - 1, elem);
+	// });
 
 // --------------- EXPERIMENT ----------------------------------------
 showSlide("instructions");
@@ -201,8 +201,9 @@ var experiment = {
 
 	train: function(counter, words, imgs, type) {
 		document.body.style.background = "black";
+		$("#manipulationCheck").hide()
 
-		//returns the list of words to use in this trial
+			//returns the list of words to use in this trial
 		var wordList = words[counter][1];
 
 		//returns the list of images to use in this trial
@@ -241,45 +242,103 @@ var experiment = {
 
 		//fade out
 		setTimeout(function() {
-			$("#stage").fadeOut();
+			$("#manipulationCheck").show()
+
+			//place cursor in text box
+			$("#checkText").focus()
+
+			//activate click if participant hits "return"
+			$("#checkText").keypress(function(event) {
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+				if (keycode == '13') {
+					event.preventDefault();
+					$('#checkButton').click();
+					$("#checkButton").off('click')
+				}
+			})
 
 
-			setTimeout(function() {
-				//show objects B & C and play word 2
-				//order that pictures will be presented in
-				var picOrderBC = shuffle(["objectB", "objectC"]);
+			$("#checkButton").off('click').on('click', function() {
 
-				//set names based on object that will be shown
-				$("#leftPic").attr("name", picOrderBC[0]);
-				$("#rightPic").attr("name", picOrderBC[1]);
+				var check1 = $("#checkText").val();
 
-				//show images
-				$("[name='objectB']").attr("src", objectB);
-				$("[name='objectC']").attr("src", objectC);
+				if (check1.length == 0) {
 
+					alert("Please fill in the blank!")
 
-				$("#stage").fadeIn();
+				} else {
 
-				//Play word 2.  label twice per pair
-				playPrompt("look_" + wordList[1]);
-
-
-				//fade out and go to test
-				setTimeout(function() {
 					$("#stage").fadeOut();
+					$("#manipulationCheck").hide()
+					$("#checkForm").trigger("reset");
+					setTimeout(function() {
+						//show objects B & C and play word 2
+						//order that pictures will be presented in
+						var picOrderBC = shuffle(["objectB", "objectC"]);
 
-					if (type == "practice") {
-						experiment.practiceTest();
-					} else if (type == "exp") {
-						experiment.experimentTest();
-					}
+						//set names based on object that will be shown
+						$("#leftPic").attr("name", picOrderBC[0]);
+						$("#rightPic").attr("name", picOrderBC[1]);
 
-				}, 6500); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
-			}, 1000);
-		}, 6500); //do we want this to last for a fixed amount of time, or have it end after the sound files are finished?
+						//show images
+						$("[name='objectB']").attr("src", objectB);
+						$("[name='objectC']").attr("src", objectC);
+
+
+						$("#stage").fadeIn();
+
+						//Play word 2.  label twice per pair
+						playPrompt("look_" + wordList[1]);
+
+
+						//fade out and go to test
+						setTimeout(function() {
+							$("#manipulationCheck").show()
+
+							//place cursor in text box
+							$("#checkText").focus()
+
+							$("#checkButton").off('click').on('click', function() {
+
+								var check2 = $("#checkText").val();
+
+								if (check2.length == 0) {
+
+									alert("Please fill in the blank!")
+
+								} else {
+
+									$("#stage").fadeOut();
+									$("#manipulationCheck").hide()
+									$("#checkForm").trigger("reset");
+
+									var manipulation_check = {
+										trialNum: counter,
+										check1: check1,
+										check2: check2
+									};
+
+									experiment.data.push(manipulation_check);
+
+									if (type == "practice") {
+										experiment.practiceTest();
+									} else if (type == "exp") {
+										experiment.experimentTest();
+									}
+								}
+
+							});
+						}, 6500); 
+					}, 1000);
+				};
+			});
+		}, 6500); 
+
+
 	},
 
 	test: function(counter, total, words, imgs, type) {
+		$("#manipulationCheck").hide()
 		$("#stage").hide();
 		document.body.style.background = "black";
 
@@ -358,9 +417,9 @@ var experiment = {
 					FirstObj: imageArray[0],
 					BothObj: imageArray[1],
 					SecondObj: imageArray[2],
-					trialType: trialTypes[trialType-1],
+					trialType: trialTypes[trialType - 1],
 					response: trim(selectedPic),
-					order: counter
+					trialNum: counter
 						//rt: endTime - startTime
 				}
 
