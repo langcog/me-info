@@ -159,12 +159,12 @@ var spriteData = {
 		onset: 133.934,
 		end: 136.063
 	},
-	one_cumo: {
+	one_kumo: {
 		start: 137.063,
 		onset: 139.348,
 		end: 141.378
 	},
-	this_cumo: {
+	this_kumo: {
 		start: 142.378,
 		onset: 144.144,
 		end: 146.314
