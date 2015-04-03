@@ -391,13 +391,16 @@ var experiment = {
 		//If they hear label 2, we expect adults to select object C
 		//If they hear a novel label (label 3), we expect adults to select object B
 
+
 		if (trialType == 1) {
-			playPrompt("find_" + wordList[0]);
+			var testWord = wordList[0];
 		} else if (trialType == 2) {
-			playPrompt("find_" + wordList[1]);
+			var testWord =  wordList[1];
 		} else if (trialType == 3) {
-			playPrompt("find_" + wordList[2]);
+			var testWord = wordList[2];
 		}
+
+		playPrompt("find_" + testWord);
 
 		$(".pic").on("click", function() {
 			if (audioSprite.paused == true) {
@@ -422,6 +425,9 @@ var experiment = {
 					trialType: trialTypes[trialType - 1],
 					response: trim(selectedPic),
 					trialNum: counter,
+					word1: wordList[0],
+					word2: wordList[1],
+					testWord: testWord,
 					check1: check1,
 					check2: check2
 						//rt: endTime - startTime
